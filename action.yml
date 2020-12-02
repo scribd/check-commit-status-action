@@ -1,0 +1,27 @@
+name: Check Commit Status
+description: GitHub Action to confirm commit statuses are their expected values.
+inputs:
+  check:
+    description: The status check(s) to validate.
+    required: true
+  status:
+    description: The expected status. Can be 'error', 'failure', 'pending' or 'success'
+    default: success
+  commit:
+    description: A commit for which to check the status.
+    default: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+  github-token:
+    description: The GitHub token to use. Only necessary to set if posting to a different repository.
+    default: ${{ github.token }}
+  repo:
+    description: The repository to check in. Only necessary to set if posting to a different repository.
+    default: ${{ github.repository }}
+  branch:
+    description: The branch to check in. Only necessary to set if posting to a different repository.
+    default: ${{ github.head_ref }}
+outputs:
+  success: 
+    description: The provided check(s) matches the expected status.
+runs:
+  using: 'node12'
+  main: 'index.js'
