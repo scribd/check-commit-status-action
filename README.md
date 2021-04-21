@@ -16,7 +16,7 @@ The expected status. Can be 'error', 'failure', 'pending' or 'success'. *Default
 
 ```yaml
 - name: Confirm Tests Passed
-  uses: justAnotherDev/check-commit-status-action@v1
+  uses: scribd/check-commit-status-action@v2
   with:
     check: |
       Run Unit Tests
