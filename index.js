@@ -16,8 +16,8 @@ const github = require('@actions/github');
 
   let success = true
   checks.forEach(check => {
-    const hasCommitStatus = commitStatuses.data ? commitStatuses.data.some((value, index, array) => value.context == check && value.state == 'success') : false
-    const hasCommitCheck = commitChecks.data.check_runs ? commitChecks.data.check_runs.some((value, index, array) => value.name == check && value.conclusion == 'success') : false
+    const hasCommitStatus = commitStatuses.data ? commitStatuses.data.some((value, index, array) => value.context == check && value.state == status) : false
+    const hasCommitCheck = commitChecks.data.check_runs ? commitChecks.data.check_runs.some((value, index, array) => value.name == check && value.conclusion == status) : false
     if (!hasCommitStatus && !hasCommitCheck) {
       success = false
       console.log(`${check} has not successfully run.`)
