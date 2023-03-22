@@ -23,5 +23,5 @@ outputs:
   success: 
     description: The provided check(s) matches the expected status.
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'index.js'
