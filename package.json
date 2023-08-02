@@ -5,7 +5,7 @@
   "keywords": [
     "github-actions"
   ],
-  "main": "./dist/index.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/justAnotherDev/check-commit-status-action.git"
