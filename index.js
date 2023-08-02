@@ -11,14 +11,15 @@ const github = require('@actions/github');
   const branch = core.getInput('branch', {required: true })
   const octokit = new github.getOctokit(token)
   
-  const commitStatuses = await octokit.repos.listCommitStatusesForRef({ owner: repoOwner, repo: repoName, ref: branch })
-  const commitChecks = await octokit.checks.listForRef({ owner: repoOwner, repo: repoName, ref: branch })
+  const commitStatuses = await octokit.repos.listCommitStatusesForRef({ owner: repoOwner, repo: repoName, ref: branch, per_page: 100 })
+  const commitChecks = await octokit.checks.listForRef({ owner: repoOwner, repo: repoName, ref: branch, per_page: 100 })
 
   let success = true
   checks.forEach(check => {
-    const hasCommitStatus = commitStatuses.data ? commitStatuses.data.some((value, index, array) => value.context == check && value.state == status) : false
-    const hasCommitCheck = commitChecks.data.check_runs ? commitChecks.data.check_runs.some((value, index, array) => value.name == check && value.conclusion == status) : false
-    if (!hasCommitStatus && !hasCommitCheck) {
+    const hasCommitStatus = commitStatuses.data ? commitStatuses.data.some((value) => value.context == check && value.state == status) : false
+    const hasCommitCheck = commitChecks.data.check_runs ? commitChecks.data.check_runs.some((value) => value.name === 'Confirm checks passed' || (value.name === check && value.conclusion === status)) : false
+
+    if (!hasCommitStatus || !hasCommitCheck) {
       success = false
       console.log(`${check} has not successfully run.`)
     }
