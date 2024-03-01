@@ -10464,13 +10464,13 @@ var __webpack_exports__ = {};
   const repoOwner = repo.split("/")[0]
   const repoName = repo.split("/")[1]
   const status = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('status', { required: true })
-  const branch = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('branch', {required: true })
+  const commit = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('commit', {required: true })
   const octokit = (0,_actions_github__WEBPACK_IMPORTED_MODULE_1__.getOctokit)(token)
 
   const commitStatuses = await octokit.repos.listCommitStatusesForRef({
     owner: repoOwner,
     repo: repoName,
-    ref: branch,
+    ref: commit,
     per_page: 100,
   });
 

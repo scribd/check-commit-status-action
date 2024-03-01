@@ -15,10 +15,10 @@ inputs:
     description: The repository to check in. Only necessary to set if posting to a different repository.
     default: ${{ github.repository }}
     required: false
-  branch:
-    description: The branch to check in. Only necessary to set if posting to a different repository.
-    default: ${{ github.head_ref }}
-    required: false
+  commit:
+    description: The commit to check.
+    default: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+    required: true
 outputs:
   success: 
     description: The provided check(s) matches the expected status.

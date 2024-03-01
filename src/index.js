@@ -8,13 +8,13 @@ import { getOctokit } from '@actions/github';
   const repoOwner = repo.split("/")[0]
   const repoName = repo.split("/")[1]
   const status = getInput('status', { required: true })
-  const branch = getInput('branch', {required: true })
+  const commit = getInput('commit', {required: true })
   const octokit = getOctokit(token)
 
   const commitStatuses = await octokit.repos.listCommitStatusesForRef({
     owner: repoOwner,
     repo: repoName,
-    ref: branch,
+    ref: commit,
     per_page: 100,
   });
 
