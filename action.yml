@@ -7,21 +7,21 @@ inputs:
   status:
     description: The expected status. Can be 'error', 'failure', 'pending' or 'success'
     default: success
-  commit:
-    description: A commit for which to check the status.
-    default: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+    required: false
   github-token:
     description: The GitHub token to use. Only necessary to set if posting to a different repository.
-    default: ${{ github.token }}
+    required: true
   repo:
     description: The repository to check in. Only necessary to set if posting to a different repository.
     default: ${{ github.repository }}
-  branch:
-    description: The branch to check in. Only necessary to set if posting to a different repository.
-    default: ${{ github.head_ref }}
+    required: false
+  commit:
+    description: The commit to check.
+    default: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+    required: true
 outputs:
   success: 
     description: The provided check(s) matches the expected status.
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'index.js'
