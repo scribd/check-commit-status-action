@@ -24,4 +24,4 @@ outputs:
     description: The provided check(s) matches the expected status.
 runs:
   using: 'node20'
-  main: 'index.js'
+  main: 'dist/index.js'
