@@ -11,23 +11,29 @@ import { getOctokit } from '@actions/github';
   const commit = getInput('commit', {required: true })
   const octokit = getOctokit(token)
 
-  const commitStatuses = await octokit.repos.listCommitStatusesForRef({
-    owner: repoOwner,
-    repo: repoName,
-    ref: commit,
-    per_page: 100,
-  });
+  // Combined status holds only the latest state per context, so re-runs can't
+  // bury a context's current state behind the full status history.
+  const statuses = []
+  for (let page = 1; ; page++) {
+    const { data } = await octokit.repos.getCombinedStatusForRef({
+      owner: repoOwner,
+      repo: repoName,
+      ref: commit,
+      per_page: 100,
+      page,
+    });
+
+    statuses.push(...data.statuses);
+    if (data.statuses.length === 0 || statuses.length >= data.total_count) break;
+  }
 
   let success = true;
   checks.forEach((check) => {
-    const hasRequiredCheckStatus =
-      commitStatuses.data?.some(
-        (value) => value.context == check && value.state == status
-      ) ?? false;
+    const found = statuses.find((value) => value.context == check);
 
-    if (!hasRequiredCheckStatus) {
+    if (found?.state != status) {
       success = false;
-      console.log(`${check} has not successfully run.`);
+      console.log(`${check} has not successfully run. (expected '${status}', found '${found?.state ?? "no status"}')`);
     }
   });
 
