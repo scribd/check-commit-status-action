@@ -1,4 +1,4 @@
-import core, { getInput } from '@actions/core';
+import { getInput, setFailed, setOutput } from '@actions/core';
 import { getOctokit } from '@actions/github';
 
 (async () => {
@@ -15,7 +15,7 @@ import { getOctokit } from '@actions/github';
   // bury a context's current state behind the full status history.
   const statuses = []
   for (let page = 1; ; page++) {
-    const { data } = await octokit.repos.getCombinedStatusForRef({
+    const { data } = await octokit.rest.repos.getCombinedStatusForRef({
       owner: repoOwner,
       repo: repoName,
       ref: commit,
@@ -37,11 +37,11 @@ import { getOctokit } from '@actions/github';
     }
   });
 
-  core.setOutput("success", success);
+  setOutput("success", success);
   if (!success) {
-    core.setFailed("Not all checks have succeeded.");
+    setFailed("Not all checks have succeeded.");
   }
 })().catch((error) => {
   console.error(error);
-  core.setFailed(error.message);
+  setFailed(error.message);
 });
